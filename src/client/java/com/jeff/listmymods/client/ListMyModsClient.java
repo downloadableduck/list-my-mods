@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
+import net.fabricmc.loader.api.metadata.Person;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.ClickEvent;
@@ -36,7 +37,7 @@ public class ListMyModsClient implements ClientModInitializer {
         String fabricName = "Fabric API";
         String fabricLink = "https://github.com/FabricMC/fabric";
 
-        final String[] currentSuggestions = new String[]{"normal", "file", "md file"};
+        final String[] currentSuggestions = new String[]{"normal", "file", "md file", "extensive"};
 
         SuggestionProvider<FabricClientCommandSource> suggestions = (context, builder) -> {
             String lowercase = builder.getRemainingLowerCase();
@@ -140,6 +141,50 @@ public class ListMyModsClient implements ClientModInitializer {
                                         e.printStackTrace();
                                     }
                                 }
+                                case "extensive" -> {
+                                    Component cFabricOwner = Component.literal("modmuss50");
+                                    Component cFabricId = Component.literal("fabric-api").withStyle(ChatFormatting.GRAY);
+                                    Component cFabricVer = Component.literal(FabricLoader.getInstance().getModContainer("fabric-api").get().getMetadata().getVersion().getFriendlyString()
+                                            ).withStyle(ChatFormatting.DARK_GREEN);
+                                    context.getSource().sendFeedback(cFabricName
+                                                    .append(" (")
+                                                    .append(cFabricId)
+                                                    .append(") ")
+                                                    .append(cFabricVer)
+                                                    .append(" by ")
+                                                    .append(cFabricOwner)
+                                                    .append(" ")
+                                                    .append(cFabricLink));
+                                    for (ModContainer mc : list) {
+                                        String name = mc.getMetadata().getName();
+                                        String id = mc.getMetadata().getId();
+                                        String version = mc.getMetadata().getVersion().getFriendlyString();
+                                        Collection<Person> authors = mc.getMetadata().getAuthors();
+                                        MutableComponent nameC = Component.literal(name).withStyle(ChatFormatting.GOLD);
+                                        MutableComponent idC = Component.literal(id).withStyle(ChatFormatting.GRAY);
+                                        MutableComponent ver = Component.literal(version).withStyle(ChatFormatting.GREEN);
+                                        MutableComponent author = Component.literal("");
+                                        for (Person person : authors) {
+                                            author.append(person.getName() + ", ");
+                                        }
+                                        boolean isURLPresent = mc.getMetadata().getContact().get("sources").isPresent();
+                                        String url = isURLPresent ? mc.getMetadata().getContact().get("sources").get() : "";
+                                        MutableComponent urlC = Component.literal(url).withStyle(ChatFormatting.DARK_AQUA, ChatFormatting.UNDERLINE);
+                                        if (!url.equals("https://github.com/FabricMC/fabric") && isURLPresent) {
+                                            context.getSource().sendFeedback(nameC.append(" (")
+                                                    .append(idC)
+                                                            .append(") ")
+                                                            .append(ver)
+                                                            .append(" by ")
+                                                            .append(author)
+                                                    .append(urlC)
+                                                    .withStyle(style -> {
+                                                        return style.withClickEvent(new ClickEvent.OpenUrl(URI.create(url)));
+                                                    }));
+                                        }
+                                    }
+                                }
+                                case null, default -> context.getSource().sendFeedback(Component.literal("Unknown input \"" + format + "\"").withStyle(ChatFormatting.RED));
                             }
                             return 1;
                         }))));
@@ -164,7 +209,5 @@ public class ListMyModsClient implements ClientModInitializer {
                             return 1;
                         })
         ));
-
-
     }
 }

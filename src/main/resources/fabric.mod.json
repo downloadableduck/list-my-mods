@@ -3,13 +3,13 @@
 	"id": "list-my-mods",
 	"version": "${version}",
 	"name": "List my Mods",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "Easy list of your mods for copy-pasting elsewhere: when reporting issues; sharing your mod list, etc.",
 	"authors": [
-		"Me!"
+		"downloadableduck"
 	],
 	"contact": {
 		"homepage": "https://modrinth.com/mod/list-my-mods",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"sources": "https://github.com/downloadableduck/list-my-mods"
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/list-my-mods/icon.png",
@@ -30,7 +30,7 @@
 		}
 	],
 	"depends": {
-		"fabricloader": ">=0.19.2",
+		"fabricloader": ">=0.18.2",
 		"minecraft": ">=26.1",
 		"java": ">=25",
 		"fabric-api": "*"
