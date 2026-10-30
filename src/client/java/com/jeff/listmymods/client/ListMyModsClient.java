@@ -1,5 +1,6 @@
 package com.jeff.listmymods.client;
 
+import com.mojang.blaze3d.Blaze3D;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import net.fabricmc.api.ClientModInitializer;
@@ -106,7 +107,7 @@ public class ListMyModsClient implements ClientModInitializer {
                                                     }
                                                 }
                                             }
-                                            Util.getPlatform().openFile(file);
+                                            Blaze3D.openPath(file.toPath());
                                         }
                                         context.getSource().sendFeedback(Component.literal("File saved to " + file.getAbsolutePath()));
                                     } catch (IOException e) {
@@ -134,7 +135,7 @@ public class ListMyModsClient implements ClientModInitializer {
                                                     }
                                                 }
                                             }
-                                            Util.getPlatform().openFile(file);
+                                            Blaze3D.openPath(file.toPath());
                                         }
                                         context.getSource().sendFeedback(Component.literal("File saved to " + file.getAbsolutePath()));
                                     } catch (IOException e) {
